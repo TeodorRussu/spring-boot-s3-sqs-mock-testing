@@ -1,0 +1,59 @@
+#global configuration
+spring:
+  application:
+    name: ${APPLICATION:lala}
+  profiles:
+    active: ${ENVIRONMENT:development}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+
+---
+spring:
+  profiles: test
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+AWS_REGION: eu-west-1
+
+cloud:
+  aws:
+    region:
+      static: ${AWS_REGION}
+    stack:
+      auto: false
+
+logging:level:com:amazonaws:util:EC2MetadataUtils: error
+logging:level:com:amazonaws:internal:InstanceMetadataServiceResourceFetcher: error
+
+sqs:
+  changes-queue: test-queue
+  changes-queue-dlq: my-dlq-queue
+  mock:
+    enabled: true
+    randomPortEnabled: true
+  queues:
+    - name: ${sqs.changes-queue-dlq}
+    - name: ${sqs.changes-queue}
+      defaultVisibilityTimeout: 1
+      delay: 0
+      receiveMessageWait: 0
+      deadLettersQueue:
+        name: ${sqs.changes-queue-dlq}
+        maxReceiveCount: 5
+
+s3:
+  mock-server-port: ${random.int(5000,5100)}
+  bucket: test-s3
