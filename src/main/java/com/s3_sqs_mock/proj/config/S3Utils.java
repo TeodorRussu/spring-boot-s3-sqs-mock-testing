@@ -20,13 +20,13 @@ public class S3Utils {
     @Autowired
     private AmazonS3 amazonS3;
 
-    private String publisherBucket;
-    private String cmsBucketDe;
-    private String cmsBucketFr;
+    private String bucketMarket;
+    private String bucketBe;
+    private String bucketFr;
 
-    public void postCmsFileToS3(String key, File file, String market) {
+    public void postFileToS3(String key, File file, String country) {
 
-        String bucket = market.equals("DE") ? cmsBucketDe : cmsBucketFr;
+        String bucket = country.equals("BE") ? bucketBe : bucketBe;
         log.info("Post file: {}, to S3 bucket: {}", key, bucket);
 
         try {
@@ -39,7 +39,7 @@ public class S3Utils {
     public Date getPublisherS3FileLastModifiedDate(String key) {
         Date lastModifiedDate;
         try {
-            lastModifiedDate = amazonS3.getObjectMetadata(publisherBucket, key).getLastModified();
+            lastModifiedDate = amazonS3.getObjectMetadata(bucketMarket, key).getLastModified();
         } catch (Exception exception) {
             throw exception;
         }
@@ -49,7 +49,7 @@ public class S3Utils {
     public String getImageEtag(String key) {
         String eTag;
         try {
-            eTag = amazonS3.getObjectMetadata(publisherBucket, key).getETag();
+            eTag = amazonS3.getObjectMetadata(bucketMarket, key).getETag();
         } catch (Exception exception) {
             throw exception;
         }
