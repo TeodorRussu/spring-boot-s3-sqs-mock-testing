@@ -22,11 +22,11 @@ public class S3Utils {
 
     private String bucketMarket;
     private String bucketBe;
-    private String bucketFr;
+    private String bucketAt;
 
     public void postFileToS3(String key, File file, String country) {
 
-        String bucket = country.equals("BE") ? bucketBe : bucketBe;
+        String bucket = country.equals("BE") ? bucketBe : bucketAt;
         log.info("Post file: {}, to S3 bucket: {}", key, bucket);
 
         try {
